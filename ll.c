@@ -14,9 +14,8 @@ ll_t *ll_new() {
 void ll_free(ll_t *ll) {
   node_t *node = ll->head;
   while (node != NULL) {
-    free(node->data);
     node_t *next_node = node->next;
-    free(node);
+    ll_node_free(node);
     node = next_node;
   }
 
@@ -29,6 +28,11 @@ node_t *ll_node_new(void *data) {
   node->prev = NULL;
   node->next = NULL;
   return node;
+}
+
+void ll_node_free(node_t *node) {
+  free(node->data);
+  free(node);
 }
 
 void ll_append_raw(ll_t *ll, node_t *node) {
@@ -60,16 +64,53 @@ void *ll_get(ll_t *ll, int index) {
   bool pos = index > 0 ? true : false;
   node_t *node = pos ? ll->head : ll->tail;
 
+  // b/c its python style, 0 is first, but -1(not -0) is last, so we must
+  // add one. ex: -1 becomes 0 from the end
+  if (!pos) index++;
+
   int i = 0;
   while (node != NULL) {
     if (i == index) {
       return node->data;
     }
     node = pos ? node->next : node->prev;
-    i++;
+    pos ? i++ : i--;
   }
 
   return NULL;
+}
+
+void ll_del(ll_t *ll, int index) {
+  if (index == 0) {
+    node_t *oldhead = ll->head;
+    ll->head = ll->head->next;
+    ll_node_free(oldhead);
+  }
+
+  bool pos = index > 0 ? true : false;
+  node_t *node = pos ? ll->head : ll->tail;
+
+  int i = 0;
+  while (node != NULL) {
+    if (i == index) {
+      node->prev->next = node->next;
+      node->next->prev = node->prev;
+      ll_node_free(node);
+    }
+    node = pos ? node->next : node->prev;
+    pos ? i++ : i--;
+  }
+}
+
+int ll_len(ll_t *ll) {
+  node_t *node = ll->head;
+  int len = 0;
+  while (node != NULL) {
+    len++;
+    node = node->next;
+  }
+
+  return len;
 }
 
 void ll_print_addr(ll_t *ll) {

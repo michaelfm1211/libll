@@ -1,12 +1,16 @@
 # libll
 
 A simple double linked-list implementation for c. libll is only suitable for a
-one specific purpose, having a list which can be appened too. libll doesn't 
-support any operations besides getting an index(python-style negative indexes
-are supported) and appending new items. More operations may come later, but
-libll was build for this specific purpose. One good feature of libll is the
-ability to have linked-lists of multiple types, as you might see in higher
-level languages.
+one specific purpose, having a list which can be appened too. libll doesn't
+have too many features, but enough for simple usage. More operations may come
+later, but libll was build to be small and minimal. One good feature of libll
+is the ability to have linked-lists of multiple types, as you might see in
+higher level languages (there're more, see ***Cool Features*** below).
+
+#### Cool Features
+* Python-like negative indexing supported
+* `LL_ITER` macro for iterating over a list shorthand
+* Linekd-Lists with different types (ie: a list with an `int` and a `bool`)
 
 ## Building
 
@@ -20,11 +24,12 @@ it! You probably want to move libll.a someone like /usr/local/lib though, or
 somehwere else where your linker can find it. Same goes for the header (ll.h)
 Also, to keep things clean, you can also run `make clean`.
 
-## Developing
+## Contributing
 
 libll is very straight-forward, so developing should be easy. To keep things
-clean, libll should be formatted with clang-format using the Google style.
-Also, libll uses [MinUnit](https://github.com/siu/minunit) for tests.
+clean and consistant, libll should be formatted with clang-format using the
+Google style. Also, libll uses [MinUnit](https://github.com/siu/minunit) for
+tests.
 
 ## License
 
