@@ -39,6 +39,9 @@ int ll_len(ll_t *ll);
 // shorthand for looping over every element in a linked list
 #define LL_ITER(ll) for (int i = 0; i < ll_len(ll); i++)
 
+// print the addresses of the nodes
+void ll_print_nodes(ll_t *ll);
+
 // print the addresses of the data
 void ll_print_addr(ll_t *ll);
 // print the data as integers

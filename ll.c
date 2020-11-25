@@ -84,17 +84,31 @@ void ll_del(ll_t *ll, int index) {
   if (index == 0) {
     node_t *oldhead = ll->head;
     ll->head = ll->head->next;
+    if(ll->head != NULL) ll->head->prev = NULL;
+    if(ll->head == NULL) ll->tail = NULL;
     ll_node_free(oldhead);
+    return;
+  } else if (index == -1) {
+    node_t *oldtail = ll->tail;
+    ll->tail = ll->tail->prev;
+    if(ll->tail != NULL) ll->tail->next = NULL;
+    if(ll->tail == NULL) ll->head = NULL;
+    ll_node_free(oldtail);
+    return;
   }
 
   bool pos = index > 0 ? true : false;
   node_t *node = pos ? ll->head : ll->tail;
 
+  // b/c its python style, 0 is first, but -1(not -0) is last, so we must
+  // add one. ex: -1 becomes 0 from the end
+  if (!pos) index++;
+
   int i = 0;
   while (node != NULL) {
     if (i == index) {
-      node->prev->next = node->next;
-      node->next->prev = node->prev;
+      if(node->prev != NULL)  node->prev->next = node->next;
+      if(node->next != NULL)  node->next->prev = node->prev;
       ll_node_free(node);
     }
     node = pos ? node->next : node->prev;
@@ -111,6 +125,15 @@ int ll_len(ll_t *ll) {
   }
 
   return len;
+}
+
+void ll_print_nodes(ll_t *ll) {
+  node_t *node = ll->head;
+  while (node != NULL) {
+    printf("%p-", node);
+    node = node->next;
+  }
+  printf("\n");
 }
 
 void ll_print_addr(ll_t *ll) {

@@ -24,6 +24,11 @@ it! You probably want to move libll.a someone like /usr/local/lib though, or
 somehwere else where your linker can find it. Same goes for the header (ll.h)
 Also, to keep things clean, you can also run `make clean`.
 
+## Examples
+
+For examples on how to use libll, look in the `examples` directory and
+EXAMPLES.md
+
 ## Contributing
 
 libll is very straight-forward, so developing should be easy. To keep things
