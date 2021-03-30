@@ -9,7 +9,7 @@ libll.a: ${OBJ}
 
 .PHONY: test
 test: test.o libll.a
-	${CC} ${CFLAGS} -g -L. -lll -lm -o $@ $<
+	${CC} ${CFLAGS} -Wall -g -L. -lll -lm -o $@ $<
 	./test
 
 .PHONY: clean
@@ -17,4 +17,4 @@ clean:
 	rm -f ${OBJ} test.o
 
 %.o: %.c
-	${CC} ${CFLAGS} -c $< -o $@
+	${CC} ${CFLAGS} -Wall -c $< -o $@
