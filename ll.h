@@ -1,14 +1,14 @@
 #pragma once
 
-typedef struct node {
+typedef struct ll_node {
   void *data;
-  struct node *prev;
-  struct node *next;
-} node_t;
+  struct ll_node *prev;
+  struct ll_node *next;
+} ll_node_t;
 
-typedef struct linked_list {
-  node_t *head;
-  node_t *tail;
+typedef struct ll_linked_list {
+  ll_node_t *head;
+  ll_node_t *tail;
 } ll_t;
 
 // create new linked list
@@ -17,11 +17,11 @@ ll_t *ll_new();
 void ll_free(ll_t *ll);
 
 // created new node by passing malloc'd pointer
-node_t *ll_node_new(void *data);
-void ll_node_free(node_t *node);
+ll_node_t *ll_node_new(void *data);
+void ll_node_free(ll_node_t *node);
 
 // append a node to the list
-void ll_append_raw(ll_t *ll, node_t *node);
+void ll_append_raw(ll_t *ll, ll_node_t *node);
 // append a malloc'd pointer onto the list
 void ll_append(ll_t *ll, void *data);
 // append a non-malloc'd int onto the list
