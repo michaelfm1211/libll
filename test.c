@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include <stdbool.h>
 #include "ll.h"
 #include "minunit.h"
 
@@ -7,6 +8,44 @@ MU_TEST(test_ll_new) {
   ll_t *ll = ll_new();
   mu_check(ll->head == NULL);
   mu_check(ll->tail == NULL);
+  ll_free(ll);
+}
+
+MU_TEST(test_ll_append) {
+  ll_t *ll = ll_new();
+  ll_append_int(ll, 1);
+  ll_append_int(ll, 2);
+
+  int head_data = *(int *)(ll->head->data);
+  mu_assert_int_eq(1, head_data);
+
+  int tail_data = *(int *)(ll->tail->data);
+  mu_assert_int_eq(2, tail_data);
+}
+
+MU_TEST(test_ll_insert) {
+  ll_t *ll = ll_new();
+  ll_append_int(ll, 1);
+  ll_append_int(ll, 2);
+  // at this point list should be [1, 2]
+
+  int result;
+  result = ll_insert_int(ll, 3, 0, false);
+  mu_assert_int_eq(0, result);
+  // at this point list should be [1, 3, 2]
+  result = ll_insert_int(ll, 4, 0, true);
+  mu_assert_int_eq(0, result);
+  // at this point list should be [4, 1, 3, 2]
+  result = ll_insert_int(ll, 5, -1, false);
+  mu_assert_int_eq(0, result);
+  // at this point list should be [4, 1, 3, 2, 5]
+
+  int head_data = *(int *)(ll->head->data);
+  mu_assert_int_eq(4, head_data);
+
+  int tail_data = *(int *)(ll->tail->data);
+  mu_assert_int_eq(5, tail_data);
+
   ll_free(ll);
 }
 
@@ -73,6 +112,8 @@ MU_TEST(test_ll_iter) {
 
 MU_TEST_SUITE(test_ll) {
   MU_RUN_TEST(test_ll_new);
+  MU_RUN_TEST(test_ll_append);
+  MU_RUN_TEST(test_ll_insert);
   MU_RUN_TEST(test_ll_get);
   MU_RUN_TEST(test_ll_del);
   MU_RUN_TEST(test_ll_len);

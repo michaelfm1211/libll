@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 typedef struct ll_node {
   void *data;
   struct ll_node *prev;
@@ -26,6 +28,18 @@ void ll_append_raw(ll_t *ll, ll_node_t *node);
 void ll_append(ll_t *ll, void *data);
 // append a non-malloc'd int onto the list
 void ll_append_int(ll_t *ll, int data);
+
+// if prepend is false, insert node after index, if true insert before index
+// will return 0 on success and 1 if index is out of bounds
+int ll_insert_raw(ll_t *ll, ll_node_t *node, int index, bool prepend);
+// wrapper for ll_insert_raw; will create node with data before calling
+// ll_insert_raw
+int ll_insert(ll_t *ll, void *data, int index, bool prepend);
+// wrapper for ll_insert; will malloc data before calling ll_insert
+int ll_insert_int(ll_t *ll, int data, int index, bool prepend);
+
+// get node from index; returns null if index nonexistant
+ll_node_t *ll_get_raw(ll_t *ll, int index);
 
 // get data from index; returns null if index nonexistant
 void *ll_get(ll_t *ll, int index);

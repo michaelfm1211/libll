@@ -58,8 +58,53 @@ void ll_append_int(ll_t *ll, int data) {
   ll_append(ll, malloc_pointer);
 }
 
-void *ll_get(ll_t *ll, int index) {
-  if (index == 0) return ll->head->data;
+int ll_insert_raw(ll_t *ll, ll_node_t *node, int index, bool prepend) {
+  if (index >= ll_len(ll)) return 1;
+
+  // before we can insert node, we need to know which nodes
+  // the inserted node will be between
+  ll_node_t *node_prev, *node_next;
+
+  if(!prepend) {
+    node_prev = ll_get_raw(ll, index);
+    if(node_prev == NULL) return 1;
+    node_next = node_prev->next;
+  } else {
+    node_next = ll_get_raw(ll, index);
+    if(node_next == NULL) return 1;
+    node_prev = node_next->prev;
+  }
+
+  // now, change prev and next nodes to now include new node
+  if(node_prev != NULL) node_prev->next = node;
+  node->prev = node_prev;
+
+  if(node_next != NULL) node_next->prev = node;
+  node->next = node_next;
+
+  // if node_prev was ll->tail or node_next was ll->head, adjust them
+  if(ll->tail == node_prev) ll->tail = node;
+  if(ll->head == node_next) ll->head = node;
+
+  return 0;
+}
+
+int ll_insert(ll_t *ll, void *data, int index, bool prepend) {
+  ll_node_t *node = ll_node_new(data);
+  int retval = ll_insert_raw(ll, node, index, prepend);
+  return retval;
+}
+
+int ll_insert_int(ll_t *ll, int data, int index, bool prepend) {
+  int *malloc_pointer = malloc(sizeof(data));
+  *malloc_pointer = data;
+  int retval = ll_insert(ll, malloc_pointer, index, prepend);
+  return retval;
+}
+
+ll_node_t *ll_get_raw(ll_t *ll, int index) {
+  if (index >= ll_len(ll)) return NULL;
+  if (index == 0) return ll->head;
 
   bool pos = index > 0 ? true : false;
   ll_node_t *node = pos ? ll->head : ll->tail;
@@ -71,7 +116,7 @@ void *ll_get(ll_t *ll, int index) {
   int i = 0;
   while (node != NULL) {
     if (i == index) {
-      return node->data;
+      return node;
     }
     node = pos ? node->next : node->prev;
     pos ? i++ : i--;
@@ -80,19 +125,24 @@ void *ll_get(ll_t *ll, int index) {
   return NULL;
 }
 
+void *ll_get(ll_t *ll, int index) {
+  ll_node_t *node = ll_get_raw(ll, index);
+  return node->data;
+}
+
 void ll_del(ll_t *ll, int index) {
   if (index == 0) {
     ll_node_t *oldhead = ll->head;
     ll->head = ll->head->next;
-    if(ll->head != NULL) ll->head->prev = NULL;
-    if(ll->head == NULL) ll->tail = NULL;
+    if (ll->head != NULL) ll->head->prev = NULL;
+    if (ll->head == NULL) ll->tail = NULL;
     ll_node_free(oldhead);
     return;
   } else if (index == -1) {
     ll_node_t *oldtail = ll->tail;
     ll->tail = ll->tail->prev;
-    if(ll->tail != NULL) ll->tail->next = NULL;
-    if(ll->tail == NULL) ll->head = NULL;
+    if (ll->tail != NULL) ll->tail->next = NULL;
+    if (ll->tail == NULL) ll->head = NULL;
     ll_node_free(oldtail);
     return;
   }
@@ -107,8 +157,8 @@ void ll_del(ll_t *ll, int index) {
   int i = 0;
   while (node != NULL) {
     if (i == index) {
-      if(node->prev != NULL)  node->prev->next = node->next;
-      if(node->next != NULL)  node->next->prev = node->prev;
+      if (node->prev != NULL) node->prev->next = node->next;
+      if (node->next != NULL) node->next->prev = node->prev;
       ll_node_free(node);
     }
     node = pos ? node->next : node->prev;
