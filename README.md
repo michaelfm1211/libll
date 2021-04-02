@@ -1,11 +1,10 @@
 # libll
 
-A simple double linked-list implementation for c. libll is only suitable for a
-one specific purpose, having a list which can be appened too. libll doesn't
-have too many features, but enough for simple usage. More operations may come
-later, but libll was build to be small and minimal. One good feature of libll
-is the ability to have linked-lists of multiple types, as you might see in
-higher level languages (there're more, see ***Cool Features*** below).
+A simple double linked-list implementation for c. libll aims to be a small
+yet comprehensive library. Occassionally new operations will be added to the
+library. One good feature of libll is the ability to have linked-lists of
+multiple types, as you might see in higher level languages
+(there're more, see ***Cool Features*** below).
 
 #### Cool Features
 * Python-like negative indexing supported
@@ -35,6 +34,13 @@ libll is very straight-forward, so developing should be easy. To keep things
 clean and consistant, libll should be formatted with clang-format using the
 Google style. Also, libll uses [MinUnit](https://github.com/siu/minunit) for
 tests.
+
+## Bindings
+
+libll has some bindings for other languages. Here is a list of the bindings
+availble for libll (to add more, please submit a pull request):
+* C++: libll (obviously)
+* Golang: [goll](https://github.com/michaelfm1211/goll)
 
 ## License
 
